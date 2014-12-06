@@ -9,6 +9,13 @@
 
 class icinga2::params {
 
+  # Work around facter >=2.2 dependency for older clients
+  if $::operatingsystemmajrelease {
+    $operatingsystemmajrelease_real = $::operatingsystemmajrelease
+  } else {
+    $operatingsystemmajrelease_real = regsubst($::operatingsystemrelease, '^(\d+)\.*$', '\1')
+  }
+
   ##############################
   # Icinga 2 common parameters
   ##############################
@@ -71,7 +78,7 @@ class icinga2::params {
   case $::operatingsystem {
     #CentOS systems:
     'CentOS': {
-      case $::operatingsystemmajrelease {
+      case $operatingsystemmajrelease_real {
         '5': {
           #Icinga 2 server package
           $icinga2_server_package = 'icinga2'
@@ -91,7 +98,7 @@ class icinga2::params {
           $icinga2_server_mail_package = 'mailx'
         }
         #Fail if we're on any other CentOS release:
-        default: { fail("${::operatingsystemmajrelease} is not a supported CentOS release!") }
+        default: { fail("${operatingsystemmajrelease_real} is not a supported CentOS release!") }
       }
     }
 
@@ -115,13 +122,13 @@ class icinga2::params {
           $server_plugin_package_install_options = '--no-install-recommends'
         }
         #Fail if we're on any other Ubuntu release:
-        default: { fail("${::operatingsystemmajrelease} is not a supported Ubuntu release version!") }
+        default: { fail("${operatingsystemmajrelease_real} is not a supported Ubuntu release version!") }
       }
     }
 
     #Debian systems:
     'Debian': {
-      case $::operatingsystemmajrelease {
+      case $operatingsystemmajrelease_real {
         #Only tested on Debian7
         '7': {
           $icinga2_server_package = 'icinga2'
@@ -131,7 +138,7 @@ class icinga2::params {
           $server_plugin_package_install_options = '--no-install-recommends'
         }
         #Fail if we're on any other Debian release:
-        default: { fail("${::operatingsystemmajrelease} is not a supported Debian release version!") }
+        default: { fail("${operatingsystemmajrelease_real} is not a supported Debian release version!") }
       }
     }
 
@@ -235,7 +242,7 @@ class icinga2::params {
     #Fail if we're on any other OS:
     default: { fail("${::operatingsystem} is not supported!") }
   }
-  
+
   #Whether to purge object files or directories in /etc/icinga2/objects that aren't managed by Puppet
   $purge_unmanaged_object_files = false
 
@@ -245,7 +252,7 @@ class icinga2::params {
   case $::operatingsystem {
     #Icinga 2 server daemon names for Red Had/CentOS systems:
     'CentOS': {
-      case $::operatingsystemmajrelease {
+      case $operatingsystemmajrelease_real {
         '5': {
           $icinga2_server_service_name = 'icinga2'
         }
@@ -256,13 +263,13 @@ class icinga2::params {
           $icinga2_server_service_name = 'icinga2'
         }
         #Fail if we're on any other CentOS release:
-        default: { fail("${::operatingsystemmajrelease} is not a supported CentOS release!") }
+        default: { fail("${operatingsystemmajrelease_real} is not a supported CentOS release!") }
       }
     }
 
     #Icinga 2 server daemon names for Ubuntu systems:
     'Ubuntu': {
-      case $::operatingsystemmajrelease {
+      case $operatingsystemmajrelease_real {
         '12.04': {
           $icinga2_server_service_name = 'icinga2'
         }
@@ -270,18 +277,18 @@ class icinga2::params {
           $icinga2_server_service_name = 'icinga2'
         }
         #Fail if we're on any other Ubuntu release:
-        default: { fail("${::operatingsystemmajrelease} is not a supported Ubuntu release version!") }
+        default: { fail("${operatingsystemmajrelease_real} is not a supported Ubuntu release version!") }
       }
     }
 
     #Icinga 2 server daemon names for Debian systems:
     'Debian': {
-      case $::operatingsystemmajrelease {
+      case $operatingsystemmajrelease_real {
         '7': {
           $icinga2_server_service_name = 'icinga2'
         }
         #Fail if we're on any other Debian release:
-        default: { fail("${::operatingsystemmajrelease} is not a supported Debian release version!") }
+        default: { fail("${operatingsystemmajrelease_real} is not a supported Debian release version!") }
       }
     }
 
@@ -349,7 +356,7 @@ class icinga2::params {
   case $::operatingsystem {
     #CentOS systems:
     'CentOS': {
-      case $::operatingsystemmajrelease {
+      case $operatingsystemmajrelease_real {
         '5': {
           #Pick the right list of client packages:
           $icinga2_client_packages = ['nrpe', 'nagios-plugins-nrpe', 'nagios-plugins-all', 'nagios-plugins-openmanage', 'nagios-plugins-check-updates']
@@ -363,7 +370,7 @@ class icinga2::params {
           $icinga2_client_packages = ['nrpe', 'nagios-plugins-nrpe', 'nagios-plugins-all', 'nagios-plugins-openmanage', 'nagios-plugins-check-updates']
         }
         #Fail if we're on any other CentOS release:
-        default: { fail("${::operatingsystemmajrelease} is not a supported CentOS release version!") }
+        default: { fail("${operatingsystemmajrelease_real} is not a supported CentOS release version!") }
       }
 
     }
@@ -384,20 +391,20 @@ class icinga2::params {
           $client_plugin_package_install_options = '--no-install-recommends'
         }
         #Fail if we're on any other Ubuntu release:
-        default: { fail("${::operatingsystemmajrelease} is not a supported Ubuntu release version!") }
+        default: { fail("${operatingsystemmajrelease_real} is not a supported Ubuntu release version!") }
       }
     }
 
     #Debian systems:
     'Debian': {
-      case $::operatingsystemmajrelease {
+      case $operatingsystemmajrelease_real {
         '7': {
           $icinga2_client_packages = ['nagios-nrpe-server', 'nagios-plugins', 'nagios-plugins-basic', 'nagios-plugins-standard', 'nagios-snmp-plugins', 'nagios-plugins-contrib', 'nagios-nrpe-plugin']
           #Specify '--no-install-recommends' so we don't inadvertently get Nagios 3 installed; it comes as a recommended package with most of the plugin packages:
           $client_plugin_package_install_options = '--no-install-recommends'
         }
         #Fail if we're on any other Debian release:
-        default: { fail("${::operatingsystemmajrelease} is not a supported Debian release version!") }
+        default: { fail("${operatingsystemmajrelease_real} is not a supported Debian release version!") }
       }
     }
 
