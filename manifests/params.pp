@@ -53,6 +53,7 @@ class icinga2::params {
 
   #Whether to manage the package repositories
   $manage_repos = true
+  $repo_url = "http://packages.icinga.org/epel/${operatingsystemmajrelease_real}/release/"
   $use_debmon_repo = false
   $server_db_type = 'pgsql'
   $install_mail_utils_package = false

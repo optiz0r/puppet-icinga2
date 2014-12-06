@@ -13,6 +13,7 @@
 
 class icinga2::server (
   $manage_repos = $icinga2::params::manage_repos,
+  $repo_url = $icinga2::params::repo_url,
   $use_debmon_repo = $icinga2::params::use_debmon_repo,
   $server_db_type = $icinga2::params::server_db_type,
   $db_name = $icinga2::params::db_name,

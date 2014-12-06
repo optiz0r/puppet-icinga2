@@ -37,7 +37,7 @@ class icinga2::server::install::repos inherits icinga2::server {
 
         #Add the official Icinga Yum repository: http://packages.icinga.org/epel/
         yumrepo { 'icinga2_yum_repo':
-          baseurl  => "http://packages.icinga.org/epel/${::operatingsystemmajrelease}/release/",
+          baseurl  => $icinga2::server::repo_url,
           descr    => 'Icinga 2 Yum repository',
           enabled  => 1,
           gpgcheck => 1,
