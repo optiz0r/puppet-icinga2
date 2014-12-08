@@ -35,8 +35,8 @@ apply Service "<%= @object_servicename %>" to Host {
   check_command = "<%= @check_command -%>"
   <%- end -%>
   <%- if @vars.empty? != true  -%>
-  <%- @vars.each_pair do |key, value| -%>
-  vars.<%= key %> = "<%= value %>"
+  <%- @vars.keys.sort.each do |key| -%>
+  vars.<%= key %> = "<%= @vars[key] %>"
   <%- end -%>
   <%- end -%>
   <%- if @max_check_attempts -%>
