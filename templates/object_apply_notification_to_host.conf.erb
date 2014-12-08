@@ -26,11 +26,11 @@ apply Notification "<%= @object_notificationname %>" to Host {
   command = "<%= @command %>"
   <%- end -%>
   <%- if @vars.empty? != true -%>
-  <%- @vars.each_pair do |key,value| -%>
-  <%= key %> = <% if value.class == String %><%= value %>
+  <%- @vars.keys.sort.each do |key| -%>
+  <%= key %> = <% if @vars[key].class == String %><%= @vars[key] %>
   <%- else -%>{
-    <%- value.each_pair do |k,v| -%>
-    <%= k %> = <%= v %>
+    <%- @vars[key].keys.sort.each do |k| -%>
+    <%= k %> = <%= @vars[key][k] %>
     <%- end -%>
   }
     <%- end -%>
@@ -44,8 +44,8 @@ apply Notification "<%= @object_notificationname %>" to Host {
   <%- end -%>
   <%- if @times.empty? != true -%>
   times = {
-  <%- @times.each_pair do |key,value| -%>
-    <%= key %> = "<%= value %>"
+  <%- @times.keys.sort.each do |key| -%>
+    <%= key %> = "<%= @times[key] %>"
   <%- end -%>
   }
   <%- end -%>
