@@ -30,8 +30,8 @@ object ScheduledDowntime  "<%= @object_scheduleddowntimename %>" {
   <%- if @ranges.empty? != true  -%>
 
   ranges = {
-  <%- @ranges.each_pair do |key, value| -%>
-    "<%= key %>" = "<%= value %>"
+  <%- @ranges.keys.sort.each do |key| -%>
+    "<%= key %>" = "<%= @ranges[key] %>"
   <%- end -%>
   }
   <%- end -%>

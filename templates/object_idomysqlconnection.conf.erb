@@ -45,8 +45,8 @@ object IdoMysqlConnection "mysql-ido" {
 
   <%- if @cleanup.empty? != true -%>
   cleanup = {
-    <%- @cleanup.each_pair do |key, value| -%>
-    <%= key %> = <%= value %>
+    <%- @cleanup.keys.sort.each do |key| -%>
+    <%= key %> = <%= @cleanup[key] %>
     <%- end -%>
   }
   <%- end -%>
