@@ -41,7 +41,7 @@ define icinga2::object::sysloglogger (
       mode    => $target_file_mode,
       content => template('icinga2/object_sysloglogger.conf.erb'),
       #...notify the Icinga 2 daemon so it can restart and pick up changes made to this config file...
-      notify  => Service['icinga2'],
+      notify  => Class['icinga2::server::service::configtest'],
     }
 
   }
