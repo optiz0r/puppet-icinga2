@@ -297,6 +297,39 @@ class icinga2::params {
     default: { fail("${::operatingsystem} is not supported!") }
   }
 
+  ##################
+  # Icinga 2 server service configtest settings
+
+  # Icinga2 config test command
+  $configtest_command = '/usr/sbin/icinga2 daemon --validate'
+
+  ##################
+  # Icinga 2 server service reload settings
+
+  case $::operatingsystem {
+    #Icinga 2 server daemon names for Red Had/CentOS systems:
+    'CentOS': {
+      case $operatingsystemmajrelease_real {
+        '5','6': {
+          $reload_command = '/etc/init.d/icinga2 reload'
+        }
+        '7': {
+          $reload_command = '/usr/bin/systemctl reload icinga2'
+        }
+        #Fail if we're on any other CentOS release:
+        default: { fail("${operatingsystemmajrelease_real} is not a supported CentOS release!") }
+      }
+    }
+
+    #Icinga 2 server daemon names for Ubuntu, Debian systems:
+    'Ubuntu', 'Debian': {
+      $reload_command = '/usr/bin/service reload icinga2'
+    }
+
+    #Fail if we're on any other OS:
+    default: { fail("${::operatingsystem} is not supported!") }
+  }
+
   ##############################
   # Icinga 2 client parameters
   ##############################

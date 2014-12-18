@@ -90,4 +90,6 @@ class icinga2::server (
   } ~>
   class {'icinga2::server::service':}
 
+  class {'icinga2::server::service::configtest':}
+  class {'icinga2::server::service::reload':}
 }
