@@ -79,7 +79,7 @@ class icinga2::params {
   case $::operatingsystem {
     #Redhat-type systems:
     'CentOS','RedHat': {
-      case $::operatingsystemmajrelease_real {
+      case $operatingsystemmajrelease_real {
         '5': {
           #Icinga 2 server package
           $icinga2_server_package = 'icinga2'
@@ -99,13 +99,13 @@ class icinga2::params {
           $icinga2_server_mail_package = 'mailx'
         }
         #Fail if we're on any other CentOS/RedHat release:
-        default: { fail("${::operatingsystemmajrelease_real} is not a supported CentOS/RedHat release!") }
+        default: { fail("${operatingsystemmajrelease_real} is not a supported CentOS/RedHat release!") }
       }
     }
 
     # Fedora systems
     'Fedora': {
-      case $::operatingsystemmajrelease_real {
+      case $operatingsystemmajrelease_real {
         '21': {
           #Icinga 2 server package
           $icinga2_server_package = 'icinga2'
@@ -113,7 +113,7 @@ class icinga2::params {
           $icinga2_server_mail_package = 'mailx'
         }
         #Fail if we're on any other Fedora release:
-        default: { fail("${::operatingsystemmajrelease_real} is not a supported Fedora release!") }
+        default: { fail("${operatingsystemmajrelease_real} is not a supported Fedora release!") }
       }
     }
 
@@ -267,7 +267,7 @@ class icinga2::params {
   case $::operatingsystem {
     #Icinga 2 server daemon names for Red Hat/CentOS systems:
     'CentOS', 'RedHat': {
-      case $::operatingsystemmajrelease_real {
+      case $operatingsystemmajrelease_real {
         '5': {
           $icinga2_server_service_name = 'icinga2'
         }
@@ -278,18 +278,18 @@ class icinga2::params {
           $icinga2_server_service_name = 'icinga2'
         }
         #Fail if we're on any other CentOS release:
-        default: { fail("${::operatingsystemmajrelease_real} is not a supported CentOS/RedHat release!") }
+        default: { fail("${operatingsystemmajrelease_real} is not a supported CentOS/RedHat release!") }
       }
     }
 
     #Icinga 2 server daemon names for Fedora systems
     'Fedora': {
-      case $::operatingsystemmajrelease_real {
+      case $operatingsystemmajrelease_real {
         '21': {
           $icinga2_server_service_name = 'icinga2'
         }
         #Fail if we're on any other CentOS release:
-        default: { fail("${::operatingsystemmajrelease_real} is not a supported Fedora release!") }
+        default: { fail("${operatingsystemmajrelease_real} is not a supported Fedora release!") }
       }
     }
 
@@ -415,7 +415,7 @@ class icinga2::params {
   case $::operatingsystem {
     #RedHat-like systems:
     'CentOS', 'RedHat': {
-      case $::operatingsystemmajrelease_real {
+      case $operatingsystemmajrelease_real {
         '5': {
           #Pick the right list of client packages:
           $icinga2_client_packages = ['nrpe', 'nagios-plugins-nrpe', 'nagios-plugins-all', 'nagios-plugins-openmanage', 'nagios-plugins-check-updates']
@@ -436,12 +436,12 @@ class icinga2::params {
 
     #Fedora systems:
     'Fedora': {
-      case $::operatingsystemmajrelease_real {
+      case $operatingsystemmajrelease_real {
         '21': {
           $icinga2_client_packages = ['nrpe', 'nagios-plugins-nrpe', 'nagios-plugins-all', 'nagios-plugins-openmanage', 'nagios-plugins-check-updates']
         }
         #Fail if we're on any other Fedora release:
-        default: { fail("${::operatingsystemmajrelease_real} is not a supported Fedora release version!") }
+        default: { fail("${operatingsystemmajrelease_real} is not a supported Fedora release version!") }
       }
     }
 
