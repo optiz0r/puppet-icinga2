@@ -32,12 +32,24 @@ class icinga2::server::install::repos inherits icinga2::server {
 
   if $manage_repos == true {
     case $::operatingsystem {
-      #CentOS systems:
-      'CentOS': {
+      #Redhat-like systems:
+      'CentOS', 'RedHat': {
 
         #Add the official Icinga Yum repository: http://packages.icinga.org/epel/
         yumrepo { 'icinga2_yum_repo':
           baseurl  => $icinga2::server::repo_url,
+          descr    => 'Icinga 2 Yum repository',
+          enabled  => 1,
+          gpgcheck => 1,
+          gpgkey   => 'http://packages.icinga.org/icinga.key'
+        }
+      }
+
+      #Fedora systems:
+      'Fedora': {
+        #Add the official Icinga Yum repository: http://packages.icinga.org/epel/
+        yumrepo { 'icinga2_yum_repo':
+          baseurl  => "http://packages.icinga.org/fedora/${::operatingsystemmajrelease}/release/",
           descr    => 'Icinga 2 Yum repository',
           enabled  => 1,
           gpgcheck => 1,

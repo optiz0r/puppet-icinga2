@@ -25,8 +25,8 @@ class icinga2::params {
   ##################
   # Icinga 2 common package parameters
   case $::operatingsystem {
-    #CentOS systems:
-    'CentOS': {
+    #RedHat-type systems:
+    'CentOS', 'Fedora', 'RedHat': {
       #Pick the right package provider:
       $package_provider = 'yum'
     }
@@ -77,9 +77,9 @@ class icinga2::params {
 
   #Pick the right package parameters based on the OS:
   case $::operatingsystem {
-    #CentOS systems:
-    'CentOS': {
-      case $operatingsystemmajrelease_real {
+    #Redhat-type systems:
+    'CentOS','RedHat': {
+      case $::operatingsystemmajrelease_real {
         '5': {
           #Icinga 2 server package
           $icinga2_server_package = 'icinga2'
@@ -98,8 +98,22 @@ class icinga2::params {
           $icinga2_server_plugin_packages = ['nagios-plugins-nrpe', 'nagios-plugins-all', 'nagios-plugins-openmanage', 'nagios-plugins-check-updates']
           $icinga2_server_mail_package = 'mailx'
         }
-        #Fail if we're on any other CentOS release:
-        default: { fail("${operatingsystemmajrelease_real} is not a supported CentOS release!") }
+        #Fail if we're on any other CentOS/RedHat release:
+        default: { fail("${::operatingsystemmajrelease_real} is not a supported CentOS/RedHat release!") }
+      }
+    }
+
+    # Fedora systems
+    'Fedora': {
+      case $::operatingsystemmajrelease_real {
+        '21': {
+          #Icinga 2 server package
+          $icinga2_server_package = 'icinga2'
+          $icinga2_server_plugin_packages = ['nagios-plugins-nrpe', 'nagios-plugins-all', 'nagios-plugins-openmanage', 'nagios-plugins-check-updates']
+          $icinga2_server_mail_package = 'mailx'
+        }
+        #Fail if we're on any other Fedora release:
+        default: { fail("${::operatingsystemmajrelease_real} is not a supported Fedora release!") }
       }
     }
 
@@ -151,8 +165,8 @@ class icinga2::params {
   # Icinga 2 server config parameters
 
   case $::operatingsystem {
-    #CentOS systems:
-    'CentOS': {
+    #RedHat-like systems:
+    'CentOS', 'RedHat', 'Fedora': {
       #Settings for /etc/icinga2/:
       $etc_icinga2_owner = 'icinga'
       $etc_icinga2_group = 'icinga'
@@ -251,9 +265,9 @@ class icinga2::params {
   # Icinga 2 server service settings
 
   case $::operatingsystem {
-    #Icinga 2 server daemon names for Red Had/CentOS systems:
-    'CentOS': {
-      case $operatingsystemmajrelease_real {
+    #Icinga 2 server daemon names for Red Hat/CentOS systems:
+    'CentOS', 'RedHat': {
+      case $::operatingsystemmajrelease_real {
         '5': {
           $icinga2_server_service_name = 'icinga2'
         }
@@ -264,7 +278,18 @@ class icinga2::params {
           $icinga2_server_service_name = 'icinga2'
         }
         #Fail if we're on any other CentOS release:
-        default: { fail("${operatingsystemmajrelease_real} is not a supported CentOS release!") }
+        default: { fail("${::operatingsystemmajrelease_real} is not a supported CentOS/RedHat release!") }
+      }
+    }
+
+    #Icinga 2 server daemon names for Fedora systems
+    'Fedora': {
+      case $::operatingsystemmajrelease_real {
+        '21': {
+          $icinga2_server_service_name = 'icinga2'
+        }
+        #Fail if we're on any other CentOS release:
+        default: { fail("${::operatingsystemmajrelease_real} is not a supported Fedora release!") }
       }
     }
 
@@ -354,8 +379,8 @@ class icinga2::params {
   $nrpe_purge_unmanaged = false
 
   case $::operatingsystem {
-    #File and template variable names for Red Had/CentOS systems:
-    'CentOS': {
+    #File and template variable names for Red Hat/CentOS systems:
+    'CentOS', 'RedHat', 'Fedora': {
       $nrpe_config_basedir = '/etc/nagios'
       $nrpe_plugin_libdir  = '/usr/lib64/nagios/plugins'
       $checkplugin_libdir  = '/usr/lib64/nagios/plugins'
@@ -388,9 +413,9 @@ class icinga2::params {
   ##################
   # Icinga 2 client package parameters
   case $::operatingsystem {
-    #CentOS systems:
-    'CentOS': {
-      case $operatingsystemmajrelease_real {
+    #RedHat-like systems:
+    'CentOS', 'RedHat': {
+      case $::operatingsystemmajrelease_real {
         '5': {
           #Pick the right list of client packages:
           $icinga2_client_packages = ['nrpe', 'nagios-plugins-nrpe', 'nagios-plugins-all', 'nagios-plugins-openmanage', 'nagios-plugins-check-updates']
@@ -407,6 +432,17 @@ class icinga2::params {
         default: { fail("${operatingsystemmajrelease_real} is not a supported CentOS release version!") }
       }
 
+    }
+
+    #Fedora systems:
+    'Fedora': {
+      case $::operatingsystemmajrelease_real {
+        '21': {
+          $icinga2_client_packages = ['nrpe', 'nagios-plugins-nrpe', 'nagios-plugins-all', 'nagios-plugins-openmanage', 'nagios-plugins-check-updates']
+        }
+        #Fail if we're on any other Fedora release:
+        default: { fail("${::operatingsystemmajrelease_real} is not a supported Fedora release version!") }
+      }
     }
 
     #Ubuntu systems:
@@ -450,7 +486,7 @@ class icinga2::params {
   # Icinga 2 client service parameters
   case $::operatingsystem {
     #Daemon names for Red Had/CentOS systems:
-    'CentOS': {
+    'CentOS', 'RedHat', 'Fedora': {
       $nrpe_daemon_name = 'nrpe'
     }
 
